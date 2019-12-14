@@ -30,7 +30,7 @@ Resources:
           Type: OAUTH
       Environment:
         ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/standard:latest
+        Image: aws/codebuild/standard:3.0
         Type: LINUX_CONTAINER
         PrivilegedMode: True
         EnvironmentVariables: 
