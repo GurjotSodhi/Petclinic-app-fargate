@@ -72,5 +72,18 @@ Resources:
                   - logs:CreateLogGroup
                   - logs:CreateLogStream
                   - logs:PutLogEvents
+                  - ecr:GetAuthorizationToken
+        - PolicyName: ecr
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource: !GetAtt ECRRepository.Arn
+                Effect: Allow
+                Action:
+                  - ecr:*
+                  
+ 
+
+                
 
 
