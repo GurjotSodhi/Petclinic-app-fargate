@@ -174,7 +174,10 @@ Resources:
             - iam:AttachRolePolicy
             - iam:DetachRolePolicy
             - iam:DeleteRole
+            - iam:DeleteRolePolicy
             - iam:GetRole
+            - iam:PutRolePolicy
+            - iam:GetRolePolicy
             - iam:PassRole
             Effect: Allow
             Resource: "*"
@@ -194,6 +197,7 @@ Resources:
               - ec2:CreateVpc
               - ec2:AttachInternetGateway
               - ec2:DescribeVpcAttribute
+              - ec2:DescribeInternetGateways
               - ec2:DeleteRouteTable
               - ec2:ModifySubnetAttribute
               - ec2:AssociateRouteTable
@@ -224,17 +228,12 @@ Resources:
               - ec2:DeleteVpc
               - ec2:CreateSubnet
               - ec2:DescribeSubnets
+              - logs:*
             Resource: "*"
           - Effect: Allow
             Action:
               - ecs:*
-            Resource:
-              - arn:aws:ecs:*:*:task/*
-              - arn:aws:ecs:*:*:task-definition/*",
-              - arn:aws:ecs:*:*:service/*
-              - arn:aws:ecs:*:*:container-instance/*
-              - arn:aws:ecs:*:*:cluster/*
-              - arn:aws:ecs:*:*:task-set/*
+            Resource: "*"
           - Effect: Allow
             Action:
               - autoscaling:*
