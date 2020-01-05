@@ -114,7 +114,7 @@ Resources:
                 DeploymentGroupName: PetClinicGroup
                 Image1ArtifactName: BuildArtifact
                 TaskDefinitionTemplateArtifact: Source
-                Image1ContainerName: ECR_IMAGE
+                Image1ContainerName: IMAGE1_NAME
                 TaskDefinitionTemplatePath: taskdef.json
                 AppSpecTemplateArtifact: Source
                 AppSpecTemplatePath: appspec.yaml
