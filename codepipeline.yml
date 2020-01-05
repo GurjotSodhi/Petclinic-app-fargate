@@ -13,10 +13,6 @@ Parameters:
     Type: String
     Description: GitHub OAuth Access Token
     NoEcho: true
-  LogGroup:
-    Type: String
-  LogStream:
-    Type: String
   RepoName:
     Type: String
     AllowedPattern: (?:[a-z0-9]+(?:[._-][a-z0-9]+)*/)*[a-z0-9]+(?:[._-][a-z0-9]+)*
@@ -73,7 +69,7 @@ Resources:
             - InputArtifacts:
               - Name: BuildArtifact
               - Name: Source
-              Name: GenerateChangeSet
+              Name: CreateEnv
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
@@ -101,26 +97,27 @@ Resources:
                     "Repo" : { "Fn::GetParam" : [ "BuildArtifact", "repo.json", "repo" ] }
                   }
               RunOrder: 1
-            # - ActionTypeId:
-            #     Category: Deploy
-            #     Owner: AWS
-            #     Provider: CloudFormation
-            #     Version: '1'
-            #   Configuration:
-            #     ActionMode: CHANGE_SET_EXECUTE
-            #     ChangeSetName: pipeline-changeset
-            #     StackName:
-            #       Fn::Join:
-            #       - ''
-            #       - - ""
-            #         - Ref: AWS::StackName
-            #         - "-"
-            #         - Ref: AWS::Region
-            #         - ""
-            #   InputArtifacts: []
-            #   Name: ExecuteChangeSet
-            #   OutputArtifacts: []
-            #   RunOrder: 2
+          - Name: Deploy App
+            Actions:
+            - InputArtifacts:
+              - Name: BuildArtifact
+              - Name: Source
+              Name: Deploy BG
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: '1'
+                Provider: CodeDeployToECS
+              OutputArtifacts: []
+              Configuration:
+                ApplicationName: PetClinic
+                DeploymentGroupName: PetClinicGroup
+                Image1ArtifactName: BuildArtifact
+                TaskDefinitionTemplateArtifact: Source
+                Image1ContainerName: ECR_IMAGE
+                TaskDefinitionTemplatePath: taskdef.json
+                AppSpecTemplateArtifact: Source
+                AppSpecTemplatePath: appspec.yaml
   ArtifactStoreBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -144,9 +141,9 @@ Resources:
             Value: !Ref ECRRepository
       LogsConfig:
         CloudWatchLogs: 
-          GroupName: !Ref LogGroup
+          GroupName: !Sub '${AWS::StackName}-group'
           Status: ENABLED
-          StreamName: !Ref LogStream
+          StreamName: !Sub '${AWS::StackName}-stream'
       Name: !Ref AWS::StackName
       ServiceRole: !Ref CodeBuildServiceRole
   CloudFormationTrustRole:
@@ -178,6 +175,10 @@ Resources:
             - iam:GetRole
             - iam:PutRolePolicy
             - iam:GetRolePolicy
+            - iam:AddRoleToInstanceProfile
+            - iam:RemoveRoleFromInstanceProfile
+            - iam:DeleteInstanceProfile
+            - iam:CreateInstanceProfile
             - iam:PassRole
             Effect: Allow
             Resource: "*"
@@ -189,6 +190,7 @@ Resources:
           - Effect: Allow
             Action:
               - ec2:DeleteNetworkInterface
+              - ec2:DescribeAccountAttributes
               - ec2:AttachVolume
               - ec2:DeleteSubnet
               - ec2:DescribeInstances
@@ -196,6 +198,8 @@ Resources:
               - ec2:DescribeRegions
               - ec2:CreateVpc
               - ec2:AttachInternetGateway
+              - ec2:AuthorizeSecurityGroupIngress
+              - ec2:RevokeSecurityGroupIngress
               - ec2:DescribeVpcAttribute
               - ec2:DescribeInternetGateways
               - ec2:DeleteRouteTable
@@ -228,6 +232,10 @@ Resources:
               - ec2:DeleteVpc
               - ec2:CreateSubnet
               - ec2:DescribeSubnets
+              - ec2:DisassociateRouteTable
+              - elasticloadbalancing:*
+              - application-autoscaling:*
+              - cloudwatch:*
               - logs:*
             Resource: "*"
           - Effect: Allow
