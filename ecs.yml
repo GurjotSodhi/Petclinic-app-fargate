@@ -362,7 +362,7 @@ Resources:
           - Name: !GetAtt ECSALB.LoadBalancerName
         TargetGroupInfoList: 
           - Name: !GetAtt ECSTG.TargetGroupName
-      ServiceRoleArn: !Ref CodeDeployRole
+      ServiceRoleArn: !GetAtt [CodeDeployRole, Arn]
 
   CodeDeployRole:
     Type: AWS::IAM::Role
