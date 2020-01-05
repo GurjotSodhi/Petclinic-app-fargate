@@ -374,7 +374,8 @@ Resources:
           Principal:
             Service: [codedeploy.amazonaws.com]
           Action: ['sts:AssumeRole']
-      ManagedPolicyArns: arn:aws:iam::aws:policy/service-role/AWSCodeDeployRoleForECS
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRoleForECS
   EC2Role:
     Type: AWS::IAM::Role
     Properties:
