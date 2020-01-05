@@ -117,7 +117,7 @@ Resources:
                 Image1ContainerName: IMAGE1_NAME
                 TaskDefinitionTemplatePath: taskdef.json
                 AppSpecTemplateArtifact: Source
-                AppSpecTemplatePath: appspec.yaml
+                AppSpecTemplatePath: appspec.yml
   ArtifactStoreBucket:
     Type: AWS::S3::Bucket
     Properties:
