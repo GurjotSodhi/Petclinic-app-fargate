@@ -166,6 +166,10 @@ Resources:
             - s3:*
             Effect: Allow
             Resource: "*"
+          - Effect: Allow
+            Action:
+              - "codedeploy:*"
+            Resource: "*"
           - Action:
             - iam:CreateRole
             - iam:AttachRolePolicy
@@ -282,6 +286,10 @@ Resources:
             - Effect: Allow
               Action:
                 - "codebuild:*"
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - "codedeploy:*"
               Resource: "*"
             - Effect: Allow
               Action:

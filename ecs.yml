@@ -2,14 +2,14 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   DesiredCapacity:
     Type: Number
-    Default: '1'
+    Default: 1
     Description: Number of instances to launch in your ECS cluster.
   Repo:
     Type: String
     Description: Repo for docker container.
   MaxSize:
     Type: Number
-    Default: '1'
+    Default: 1
     Description: Maximum number of instances that can be launched in your ECS cluster.
   InstanceType:
     Description: EC2 instance type
@@ -122,24 +122,24 @@ Resources:
     Properties:
       GroupId: !Ref 'EcsSecurityGroup'
       IpProtocol: tcp
-      FromPort: '8080'
-      ToPort: '8080'
+      FromPort: 8080
+      ToPort: 8080
       CidrIp: 0.0.0.0/0
-  EcsSecurityGroupHTTPinbound:
+  EcsSecurityGroupHTTPinboundBG:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref 'EcsSecurityGroup'
       IpProtocol: tcp
-      FromPort: '8081'
-      ToPort: '8081'
+      FromPort: 8081
+      ToPort: 8081
       CidrIp: 0.0.0.0/0
   EcsSecurityGroupALBports:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref 'EcsSecurityGroup'
       IpProtocol: tcp
-      FromPort: '31000'
-      ToPort: '61000'
+      FromPort: 31000
+      ToPort: 61000
       SourceSecurityGroupId: !Ref 'EcsSecurityGroup'
   CloudwatchLogsGroup:
     Type: AWS::Logs::LogGroup
@@ -153,7 +153,7 @@ Resources:
       ContainerDefinitions:
       - Name: petclinic
         Cpu: 10
-        Essential: 'true'
+        Essential: true
         Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Repo}:latest'
         Memory: 300
         LogConfiguration:
@@ -182,7 +182,7 @@ Resources:
       - Type: forward
         TargetGroupArn: !Ref 'ECSTG'
       LoadBalancerArn: !Ref 'ECSALB'
-      Port: '8080'
+      Port: 8080
       Protocol: HTTP
   ECSALBListenerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
@@ -204,7 +204,7 @@ Resources:
       - Type: forward
         TargetGroupArn: !Ref 'ECSTGBlue'
       LoadBalancerArn: !Ref 'ECSALB'
-      Port: '8081'
+      Port: 8081
       Protocol: HTTP
   ECSALBListenerRuleBlue:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
@@ -257,7 +257,7 @@ Resources:
         Timeout: PT15M
     UpdatePolicy:
       AutoScalingReplacingUpdate:
-        WillReplace: 'true'
+        WillReplace: true
   ContainerInstances:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
@@ -276,10 +276,10 @@ Resources:
     DependsOn: ALBListener
     Properties:
       Cluster: !Ref 'ECSCluster'
-      DesiredCount: '1'
+      DesiredCount: 1
       LoadBalancers:
       - ContainerName: petclinic
-        ContainerPort: '8080'
+        ContainerPort: 8080
         TargetGroupArn: !Ref 'ECSTG'
       Role: !Ref 'ECSServiceRole'
       TaskDefinition: !Ref 'taskdefinition'
@@ -328,11 +328,11 @@ Resources:
   ALB500sAlarmScaleUp:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      EvaluationPeriods: '1'
+      EvaluationPeriods: 1
       Statistic: Average
-      Threshold: '10'
+      Threshold: 10
       AlarmDescription: Alarm if our ALB generates too many HTTP 500s.
-      Period: '60'
+      Period: 60
       AlarmActions: [!Ref 'ServiceScalingPolicy']
       Namespace: AWS/ApplicationELB
       Dimensions:
@@ -357,7 +357,6 @@ Resources:
           RevisionType: AppSpecContent
       DeploymentStyle: 
         DeploymentOption: WITH_TRAFFIC_CONTROL
-        DeploymentType: BLUE_GREEN
       LoadBalancerInfo: 
         ElbInfoList:
           - Name: !GetAtt ECSALB.LoadBalancerName
