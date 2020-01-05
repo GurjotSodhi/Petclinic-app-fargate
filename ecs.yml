@@ -217,7 +217,7 @@ Resources:
       - Field: path-pattern
         Values: [/]
       ListenerArn: !Ref 'ALBListener'
-      Priority: 1
+      Priority: 2
   ECSTG:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     DependsOn: ECSALB
@@ -362,7 +362,7 @@ Resources:
           - Name: !GetAtt ECSALB.LoadBalancerName
         TargetGroupInfoList: 
           - Name: !GetAtt ECSTG.TargetGroupName
-      ServiceRoleArn: String
+      ServiceRoleArn: !Ref CodeDeployRole
 
   CodeDeployRole:
     Type: AWS::IAM::Role
