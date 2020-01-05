@@ -97,12 +97,12 @@ Resources:
                     "Repo" : { "Fn::GetParam" : [ "BuildArtifact", "repo.json", "repo" ] }
                   }
               RunOrder: 1
-          - Name: Deploy App
+          - Name: DeployApp
             Actions:
             - InputArtifacts:
               - Name: BuildArtifact
               - Name: Source
-              Name: Deploy BG
+              Name: BlueGreen
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
