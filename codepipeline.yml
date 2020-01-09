@@ -101,23 +101,17 @@ Resources:
             Actions:
             - InputArtifacts:
               - Name: BuildArtifact
-              - Name: Source
               Name: BlueGreen
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
                 Version: '1'
-                Provider: CodeDeployToECS
+                Provider: ECS
               OutputArtifacts: []
               Configuration:
-                ApplicationName: PetClinic
-                DeploymentGroupName: PetClinicGroup
-                Image1ArtifactName: BuildArtifact
-                TaskDefinitionTemplateArtifact: Source
-                Image1ContainerName: IMAGE1_NAME
-                TaskDefinitionTemplatePath: taskdef.json
-                AppSpecTemplateArtifact: Source
-                AppSpecTemplatePath: appspec.yml
+                ClusterName: spring-petclinic
+                ServiceName: petclinic
+                FileName: imagedefinitions.json
   ArtifactStoreBucket:
     Type: AWS::S3::Bucket
     Properties:

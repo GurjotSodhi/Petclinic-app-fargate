@@ -112,6 +112,7 @@ Resources:
       RouteTableId: !Ref 'RouteTable'
   ECSCluster:
     Type: AWS::ECS::Cluster
+    ClusterName: spring-petclinic
   EcsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -276,6 +277,7 @@ Resources:
     DependsOn: ALBListener
     Properties:
       Cluster: !Ref 'ECSCluster'
+      ServiceName: petclinic
       DesiredCount: 1
       LoadBalancers:
       - ContainerName: petclinic
@@ -342,27 +344,6 @@ Resources:
             - LoadBalancerFullName
       ComparisonOperator: GreaterThanThreshold
       MetricName: HTTPCode_ELB_5XX_Count
-  DeployApplication:
-    Type: AWS::CodeDeploy::Application
-    Properties: 
-      ApplicationName: PetClinic
-      ComputePlatform: ECS
-  DeployGroup:
-    Type: AWS::CodeDeploy::DeploymentGroup
-    Properties: 
-      ApplicationName: !Ref DeployApplication
-      DeploymentGroupName: PetClinicGroup
-      Deployment: 
-        Revision:
-          RevisionType: AppSpecContent
-      DeploymentStyle: 
-        DeploymentOption: WITH_TRAFFIC_CONTROL
-      LoadBalancerInfo: 
-        ElbInfoList:
-          - Name: !GetAtt ECSALB.LoadBalancerName
-        TargetGroupInfoList: 
-          - Name: !GetAtt ECSTG.TargetGroupName
-      ServiceRoleArn: !GetAtt [CodeDeployRole, Arn]
 
   CodeDeployRole:
     Type: AWS::IAM::Role
