@@ -112,7 +112,8 @@ Resources:
       RouteTableId: !Ref 'RouteTable'
   ECSCluster:
     Type: AWS::ECS::Cluster
-    ClusterName: spring-petclinic
+    Properties:
+      ClusterName: spring-petclinic
   EcsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
