@@ -283,7 +283,7 @@ Resources:
               Resource: "*"
             - Effect: Allow
               Action:
-                - "codedeploy:*"
+                - "ecs:*"
               Resource: "*"
             - Effect: Allow
               Action:
