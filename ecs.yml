@@ -113,7 +113,6 @@ Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: spring-petclinic
   EcsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -126,14 +125,6 @@ Resources:
       IpProtocol: tcp
       FromPort: 8080
       ToPort: 8080
-      CidrIp: 0.0.0.0/0
-  EcsSecurityGroupHTTPinboundBG:
-    Type: AWS::EC2::SecurityGroupIngress
-    Properties:
-      GroupId: !Ref 'EcsSecurityGroup'
-      IpProtocol: tcp
-      FromPort: 8081
-      ToPort: 8081
       CidrIp: 0.0.0.0/0
   EcsSecurityGroupALBports:
     Type: AWS::EC2::SecurityGroupIngress
@@ -198,28 +189,6 @@ Resources:
         Values: [/]
       ListenerArn: !Ref 'ALBListener'
       Priority: 1
-  ALBListenerBlue:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    DependsOn: ECSServiceRole
-    Properties:
-      DefaultActions:
-      - Type: forward
-        TargetGroupArn: !Ref 'ECSTGBlue'
-      LoadBalancerArn: !Ref 'ECSALB'
-      Port: 8081
-      Protocol: HTTP
-  ECSALBListenerRuleBlue:
-    Type: AWS::ElasticLoadBalancingV2::ListenerRule
-    DependsOn: ALBListener
-    Properties:
-      Actions:
-      - Type: forward
-        TargetGroupArn: !Ref 'ECSTGBlue'
-      Conditions:
-      - Field: path-pattern
-        Values: [/]
-      ListenerArn: !Ref 'ALBListener'
-      Priority: 2
   ECSTG:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     DependsOn: ECSALB
@@ -230,19 +199,6 @@ Resources:
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
       Port: 8080
-      Protocol: HTTP
-      UnhealthyThresholdCount: 2
-      VpcId: !Ref 'VPC'
-  ECSTGBlue:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    DependsOn: ECSALB
-    Properties:
-      HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /
-      HealthCheckProtocol: HTTP
-      HealthCheckTimeoutSeconds: 5
-      HealthyThresholdCount: 2
-      Port: 8081
       Protocol: HTTP
       UnhealthyThresholdCount: 2
       VpcId: !Ref 'VPC'
@@ -278,7 +234,6 @@ Resources:
     DependsOn: ALBListener
     Properties:
       Cluster: !Ref 'ECSCluster'
-      ServiceName: petclinic
       DesiredCount: 1
       LoadBalancers:
       - ContainerName: petclinic
