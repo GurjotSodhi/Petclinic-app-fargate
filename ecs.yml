@@ -111,8 +111,7 @@ Resources:
       SubnetId: !Ref 'SubnetB'
       RouteTableId: !Ref 'RouteTable'
   ECSCluster:
-    Type: AWS::ECS::Cluster
-    Properties:
+    Type: AWS::ECS::Cluster 
   EcsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
