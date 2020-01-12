@@ -111,7 +111,9 @@ Resources:
       SubnetId: !Ref 'SubnetB'
       RouteTableId: !Ref 'RouteTable'
   ECSCluster:
-    Type: AWS::ECS::Cluster 
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: spring-petclinic
   EcsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -233,6 +235,7 @@ Resources:
     DependsOn: ALBListener
     Properties:
       Cluster: !Ref 'ECSCluster'
+      ServiceName: petclinic
       DesiredCount: 1
       LoadBalancers:
       - ContainerName: petclinic
