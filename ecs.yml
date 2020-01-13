@@ -150,6 +150,10 @@ Resources:
         Essential: true
         Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Repo}:latest'
         Memory: 300
+        HealthCheck:
+            Command:
+              - "CMD-SHELL"
+              - "curl -f http://localhost:8080/ || exit 1"
         LogConfiguration:
           LogDriver: awslogs
           Options:
