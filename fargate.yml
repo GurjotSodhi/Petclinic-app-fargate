@@ -76,7 +76,7 @@ Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties:
-      ClusterName: spring-petclinic
+      ClusterName: spring-petclinic-fargate
   EcsSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -106,7 +106,7 @@ Resources:
   taskdefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: !Join ['', [!Ref 'AWS::StackName', -ecs-spring-petclinic]]
+      Family: !Join ['', [!Ref 'AWS::StackName', -ecs-spring-petclinic-fargate-fargate]]
       RequiresCompatibilities:
         - FARGATE
       ContainerDefinitions:
@@ -125,7 +125,7 @@ Resources:
           Options:
             awslogs-group: !Ref 'CloudwatchLogsGroup'
             awslogs-region: !Ref 'AWS::Region'
-            awslogs-stream-prefix: ecs-spring-petclinic
+            awslogs-stream-prefix: ecs-spring-petclinic-fargate
         PortMappings:
         - ContainerPort: 8080
   ECSALB:
