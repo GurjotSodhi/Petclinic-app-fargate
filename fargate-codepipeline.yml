@@ -112,7 +112,7 @@ Resources:
                 Provider: ECS
               OutputArtifacts: []
               Configuration:
-                ClusterName: spring-petclinic
+                ClusterName: spring-petclinic-fargate
                 ServiceName: petclinic
                 FileName: imagedefinitions.json
   ArtifactStoreBucket:
