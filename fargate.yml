@@ -185,13 +185,10 @@ Resources:
         AwsvpcConfiguration:
           AssignPublicIp: ENABLED
           SecurityGroups:
-            - Fn::ImportValue:
-                !Join [':', [!Ref 'StackName', 'EcsSecurityGroup']]
+            - !Ref EcsSecurityGroup
           Subnets:
-            - Fn::ImportValue:
-                !Join [':', [!Ref 'StackName', 'PrivateSubnetOne']]
-            - Fn::ImportValue:
-                !Join [':', [!Ref 'StackName', 'PrivateSubnetTwo']]
+            - !Ref SubnetA
+            - !Ref SubnetB
   ECSServiceRole:
     Type: AWS::IAM::Role
     Properties:
