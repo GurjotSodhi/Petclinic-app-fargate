@@ -163,6 +163,7 @@ Resources:
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
+      TargetType: ip
       Port: 8080
       Protocol: HTTP
       UnhealthyThresholdCount: 2
