@@ -105,6 +105,8 @@ Resources:
       RequiresCompatibilities:
         - FARGATE
       NetworkMode: awsvpc
+      Cpu: 10
+      Memory: 300
       ContainerDefinitions:
       - Name: petclinic
         Cpu: 10
