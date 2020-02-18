@@ -109,6 +109,7 @@ Resources:
       Family: !Join ['', [!Ref 'AWS::StackName', -ecs-spring-petclinic-fargate-fargate]]
       RequiresCompatibilities:
         - FARGATE
+      NetworkMode: awsvpc
       ContainerDefinitions:
       - Name: petclinic
         Cpu: 10
