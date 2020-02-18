@@ -98,11 +98,6 @@ Resources:
       FromPort: 31000
       ToPort: 61000
       SourceSecurityGroupId: !Ref 'EcsSecurityGroup'
-  CloudwatchLogsGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Join ['-', [ECSLogGroup, !Ref 'AWS::StackName']]
-      RetentionInDays: 14
   taskdefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -121,12 +116,6 @@ Resources:
               - "CMD-SHELL"
               - "wget http://localhost:8080/ || exit 1"
             StartPeriod: 300
-        LogConfiguration:
-          LogDriver: awslogs
-          Options:
-            awslogs-group: !Ref 'CloudwatchLogsGroup'
-            awslogs-region: !Ref 'AWS::Region'
-            awslogs-stream-prefix: ecs-spring-petclinic-fargate
         PortMappings:
         - ContainerPort: 8080
   ECSALB:
