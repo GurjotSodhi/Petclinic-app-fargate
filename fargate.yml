@@ -105,14 +105,14 @@ Resources:
       RequiresCompatibilities:
         - FARGATE
       NetworkMode: awsvpc
-      Cpu: 10
-      Memory: 300
+      Cpu: 256
+      Memory: 512
       ContainerDefinitions:
       - Name: petclinic
-        Cpu: 10
+        Cpu: 256
         Essential: true
         Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Repo}:latest'
-        Memory: 300
+        Memory: 512
         HealthCheck:
             Command:
               - "CMD-SHELL"
