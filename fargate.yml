@@ -107,6 +107,8 @@ Resources:
       NetworkMode: awsvpc
       Cpu: 256
       Memory: 512
+      ExecutionRoleArn: !Ref TaskRole
+      TaskRoleArn: !Ref TaskRole
       ContainerDefinitions:
       - Name: petclinic
         Cpu: 256
@@ -197,6 +199,31 @@ Resources:
               'elasticloadbalancing:Describe*', 'elasticloadbalancing:RegisterInstancesWithLoadBalancer',
               'elasticloadbalancing:RegisterTargets', 'ec2:Describe*', 'ec2:AuthorizeSecurityGroupIngress']
             Resource: '*'
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ecs-tasks.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: ecs-service
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: ['ecs:CreateCluster', 'ecs:DeregisterContainerInstance', 'ecs:DiscoverPollEndpoint',
+              'ecs:Poll', 'ecs:RegisterContainerInstance', 'ecs:StartTelemetrySession',
+              'ecs:Submit*', 'logs:CreateLogStream', 'logs:PutLogEvents', 'ecr:GetAuthorizationToken']
+            Resource: '*'
+      - PolicyName: ecr-service
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: 'ecr:*'
+            Resource: !Sub 'arn:aws:ecr:${AWS::Region}:${AWS::AccountId}:repository/${Repo}'
 
   CodeDeployRole:
     Type: AWS::IAM::Role
