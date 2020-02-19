@@ -179,7 +179,6 @@ Resources:
       - ContainerName: petclinic
         ContainerPort: 8080
         TargetGroupArn: !Ref 'ECSTG'
-      Role: !Ref 'ECSServiceRole'
       TaskDefinition: !Ref 'taskdefinition'
       NetworkConfiguration:
         AwsvpcConfiguration:
