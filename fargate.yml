@@ -105,16 +105,16 @@ Resources:
       RequiresCompatibilities:
         - FARGATE
       NetworkMode: awsvpc
-      Cpu: 256
-      Memory: 512
+      Cpu: 1024
+      Memory: 2048
       ExecutionRoleArn: !Ref TaskRole
       TaskRoleArn: !Ref TaskRole
       ContainerDefinitions:
       - Name: petclinic
-        Cpu: 256
+        Cpu: 1024
         Essential: true
         Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Repo}:latest'
-        Memory: 512
+        Memory: 2058
         HealthCheck:
             Command:
               - "CMD-SHELL"
@@ -158,7 +158,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     DependsOn: ECSALB
     Properties:
-      HealthCheckIntervalSeconds: 10
+      HealthCheckIntervalSeconds: 30
       HealthCheckPath: /
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
@@ -166,7 +166,7 @@ Resources:
       TargetType: ip
       Port: 8080
       Protocol: HTTP
-      UnhealthyThresholdCount: 2
+      UnhealthyThresholdCount: 10
       VpcId: !Ref 'VPC'
   service:
     Type: AWS::ECS::Service
@@ -174,6 +174,7 @@ Resources:
     Properties:
       Cluster: !Ref 'ECSCluster'
       ServiceName: petclinic
+      LaunchType: FARGATE
       DesiredCount: 1
       LoadBalancers:
       - ContainerName: petclinic
