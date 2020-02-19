@@ -114,7 +114,7 @@ Resources:
         Cpu: 1024
         Essential: true
         Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Repo}:latest'
-        Memory: 2058
+        Memory: 2048
         HealthCheck:
             Command:
               - "CMD-SHELL"
