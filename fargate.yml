@@ -115,11 +115,6 @@ Resources:
         Essential: true
         Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Repo}:latest'
         Memory: 2048
-        HealthCheck:
-            Command:
-              - "CMD-SHELL"
-              - "wget http://localhost:8080/ || exit 1"
-            StartPeriod: 300
         PortMappings:
         - ContainerPort: 8080
   ECSALB:
